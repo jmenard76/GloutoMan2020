@@ -176,7 +176,7 @@ type
 //
 const
      // Constantes générales
-     VERSION_PERSO=True;
+     VERSION_PERSO=False;
      NB_COLONNES=80;
      NB_LIGNES=50;
      NB_NIVEAUX=20;
@@ -415,14 +415,14 @@ end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
-    application.onactivate:=appactivate;
-    application.ondeactivate:=appdeactivate;
+    //application.onactivate:=appactivate;
+    //application.ondeactivate:=appdeactivate;
     Chargeruntableau1.Visible:=VERSION_PERSO;
     charger_ini;
     InitialisationObjets;
     if ch_tableaux='' then ch_tableaux:=chemin_application;
     opendialog1.initialdir:=ch_tableaux;
-    zoneJeux.Cursor:=crnone;
+    //zoneJeux.Cursor:=crnone;
     nouvelle_partie;
 end;
 
@@ -723,6 +723,7 @@ begin
                     afficherTout:=false;
                     formProprietes.pagecontrol1.activepage:=formProprietes.tabsheet1;
                end;
+               Chargeruntableau1.Visible:=tricheur;
           end;
 
      end
@@ -735,8 +736,7 @@ begin
           if key='p' then
           begin
                pause:=not(pause);
-               if pause then zoneJeux.cursor:=crdefault
-               else zoneJeux.cursor:=crnone;
+               //if pause then zoneJeux.cursor:=crdefault else zoneJeux.cursor:=crnone;
                pause1.visible:=pause;
           end
           else if (key='0') then
@@ -2218,7 +2218,7 @@ begin
           if (gloutoman[1].vie=0) and (gloutoman[2].vie=0) then
           begin
                pause:=true;
-               zoneJeux.cursor:=crdefault;
+               //zoneJeux.cursor:=crdefault;
                if cooperatif then affichageMessage(MESSAGE2, 1)
                else
                begin
@@ -2229,7 +2229,7 @@ begin
                if reponseMessage then
                begin
                     pause:=false;
-                    zoneJeux.cursor:=crnone;
+                    //zoneJeux.cursor:=crnone;
                     Nouvelle_partie;
                end
                else
@@ -2240,13 +2240,13 @@ begin
      begin
           if (gloutoman[1].score>hscore)and not(tricheur) then hscore:=gloutoman[1].score;
           pause:=true;
-          zoneJeux.cursor:=crdefault;
+          //zoneJeux.cursor:=crdefault;
           affichageMessage(MESSAGE2, 1);
           affichageMessage(MESSAGE7, 2);
           if reponseMessage then
           begin
              pause:=false;
-             zoneJeux.cursor:=crnone;
+             //zoneJeux.cursor:=crnone;
              Nouvelle_partie;
           end
           else
@@ -2262,10 +2262,10 @@ begin
      if not(multijoueurs)or((multijoueurs)and(cooperatif))then
      begin
           pause:=true;
-          zoneJeux.cursor:=crdefault;
+          //zoneJeux.cursor:=crdefault;
           affichageMessage(MESSAGE1+inttostr(level), 0);
           pause:=false;
-          zoneJeux.cursor:=crnone;
+          //zoneJeux.cursor:=crnone;
           if not(one) then
           begin
             if level<nb_level then inc(level)
@@ -2279,22 +2279,22 @@ begin
           if nb_cerises=4 then
           begin
                pause:=true;
-               zoneJeux.cursor:=crdefault;
+               //zoneJeux.cursor:=crdefault;
                affichageMessage(MESSAGE3+inttostr(level), 0);
                inc(gloutoman[1].score,5000);
                pause:=false;
-               zoneJeux.cursor:=crnone;
+               //zoneJeux.cursor:=crnone;
                inc(level);
                debut_tableau;
           end
           else if nb_bananes=4 then
           begin
                pause:=true;
-               zoneJeux.cursor:=crdefault;
+               //zoneJeux.cursor:=crdefault;
                affichageMessage(MESSAGE4+inttostr(level), 0);
                inc(gloutoman[2].score,5000);
                pause:=false;
-               zoneJeux.cursor:=crnone;
+               //zoneJeux.cursor:=crnone;
                inc(level);
                debut_tableau;
           end;
@@ -2307,7 +2307,7 @@ end;
 procedure TFormMain.gagner;
 begin
      pause:=true;
-     zoneJeux.cursor:=crdefault;
+     //zoneJeux.cursor:=crdefault;
      if multijoueurs and adversaire then
      begin
                if gloutoman[1].score>gloutoman[2].score then affichageMessage(MESSAGE8, 0)
@@ -2318,7 +2318,7 @@ begin
      begin
          if not(multijoueurs)and(gloutoman[1].score>hscore)and not(tricheur) then hscore:=gloutoman[1].score;
          pause:=false;
-         zoneJeux.cursor:=crnone;
+         //zoneJeux.cursor:=crnone;
          Nouvelle_partie;
      end
      else
