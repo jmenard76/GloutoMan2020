@@ -79,10 +79,10 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <Icon_MainIcon>GloutoMan_Icon.ico</Icon_MainIcon>
-        <VerInfo_Build>29</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.1.29;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>30</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.2.30;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
         <VerInfo_MajorVer>9</VerInfo_MajorVer>
-        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_Release>2</VerInfo_Release>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -99,10 +99,10 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <Icon_MainIcon>GloutoMan_Icon.ico</Icon_MainIcon>
         <VerInfo_MajorVer>9</VerInfo_MajorVer>
-        <VerInfo_Release>1</VerInfo_Release>
+        <VerInfo_Release>2</VerInfo_Release>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.1.18;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>18</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.2.1;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>1</VerInfo_Build>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
     </PropertyGroup>
     <ItemGroup>
@@ -123,10 +123,6 @@
         </DCCReference>
         <DCCReference Include="UnitObjets.pas"/>
         <DCCReference Include="JME_Jeux2D.pas"/>
-        <DCCReference Include="UnitMessages.pas">
-            <Form>FormMessages</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <RcItem Include="Sons\Bonus.wav">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>WAVE</ResourceType>

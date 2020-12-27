@@ -114,7 +114,7 @@ procedure TFormProprietes.Button3Click(Sender: TObject);
 begin
   trackbar1.position:=110-30;
   trackbar2.position:=110-55;
-  trackbar3.position:=30;
+  trackbar3.position:=35;
   checkbox1.Checked:=true;
   checkbox3.Checked:=false;
   checkbox2.Checked:=false;

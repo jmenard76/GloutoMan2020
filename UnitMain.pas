@@ -34,7 +34,11 @@ type
     ImageListFantomes: TImageList;
     Recommencerletableau1: TMenuItem;
     lectureTableau: TMemo;
-    TimerAnimationDialog: TTimer;
+    PanelMessages: TPanel;
+    ButtonNon: TButton;
+    ButtonOK: TButton;
+    ImageFond: TImage;
+    Message: TLabel;
 
     procedure InitialisationObjets;
     procedure DestructionObjets;
@@ -54,7 +58,6 @@ type
     procedure gagner;
     procedure afficherPoints(var n:integer; points:string);
     procedure explosion_bombe(n:integer);
-    procedure animationMessage;
 
     procedure jouerSon(son:integer);
     procedure FormCreate(Sender: TObject);
@@ -72,7 +75,8 @@ type
     procedure Nouvellepartie1Click(Sender: TObject);
     procedure Recommencerletableau1Click(Sender: TObject);
     procedure affichageMessage(texte : String; typeAffichageMessage : Integer);
-    procedure TimerAnimationDialogTimer(Sender: TObject);
+    procedure ButtonOKClick(Sender: TObject);
+    procedure ButtonNonClick(Sender: TObject);
 
   private
     { Déclarations privées }
@@ -84,8 +88,9 @@ type
     valeurPrec: array[1..2] of Integer;
     couleur_fond:TColor;
     couleur_mur, couleur_murf : Integer;
-    effetsSonores, visu_img, one, typeMessage, reponseMessage : Boolean;
+    effetsSonores, visu_img, one, typeMessage : Boolean;
     lien_tableau, messageAAfficher : String;
+    actionMessage : Integer;
 
     // Variables pour noms de fichiers
     nomfich, nom_image, ch_tableaux, ch_sons : String;
@@ -280,7 +285,7 @@ var
 
 implementation
 
-uses UnitProprietes, UnitAPropos, UnitMessages;
+uses UnitProprietes, UnitAPropos;
 //
 //  **************************
 //  ** Variables générales  **
@@ -418,59 +423,56 @@ begin
     //application.onactivate:=appactivate;
     //application.ondeactivate:=appdeactivate;
     Chargeruntableau1.Visible:=VERSION_PERSO;
-    charger_ini;
+    Charger_ini;
     InitialisationObjets;
     if ch_tableaux='' then ch_tableaux:=chemin_application;
-    opendialog1.initialdir:=ch_tableaux;
-    //zoneJeux.Cursor:=crnone;
-    nouvelle_partie;
+    Opendialog1.initialdir:=ch_tableaux;
+    Randomize;
+    Nouvelle_partie;
 end;
 
 procedure TFormMain.charger_ini;
 var
-  theIni : TInifile;
+  fichierIni : TInifile;
 begin
-     theIni := TIniFile.Create(chemin_application+'gloutoman.ini');
-     hscore:=TheIni.readInteger('Scores', 'High score',0);
-     effetssonores1.checked:=Theini.readbool('Options','Effets sonores',true);
-     effetsSonores:=effetssonores1.checked;
-     avancePixels:=theini.readinteger('Vitesses','nb_cases',2);
-     refresh:=theini.readinteger('Affichage','Rafraichissement',30);
-     vitesse_selectglouto:=TheIni.readInteger('Vitesses', 'gloutoman',30);
-     vitesse_fantome:=TheIni.readInteger('Vitesses', 'fantomes',55);
-     reincarnation:=TheIni.readInteger('Vitesses', 'réincarnations',30)*1000;
-     vitesse_animations:=round(refresh*10);
-     vcolle:=round(vitesse_selectglouto/1.5);
-     vpat:=round(vitesse_selectglouto/1.5);
-     animations:=true;        //theini.readbool('Affichage','Animations',true);
-     visu_img:=false;         //theini.readbool('Affichage','Images de fond',false);
-     multijoueurs:=theini.readbool('Multijoueur','Joueurs',false);
-     cooperatif:=theini.readbool('Multijoueur','Mode coopératif',true);
-     adversaire:=theini.readbool('Multijoueur','Mode adversaire',false);
-     nb_level:=NB_NIVEAUX;    //theini.readinteger('Niveaux','Nombre de niveaux',1);
-     if VERSION_PERSO then ch_tableaux:=theini.readstring('Chemins','tableaux',chemin_application+'niveaux\');
-     theIni.Free;
+     fichierIni := TIniFile.Create(chemin_application+'gloutoman.ini');
+     hscore := fichierIni.readInteger('Scores', 'High score',0);
+     Effetssonores1.checked := fichierIni.readbool('Options','Effets sonores', True);
+     effetsSonores := Effetssonores1.checked;
+     avancePixels := fichierIni.readinteger('Vitesses','nb_cases',2);
+     refresh := fichierIni.readinteger('Affichage','Rafraichissement',30);
+     vitesse_selectglouto := fichierIni.readInteger('Vitesses', 'gloutoman',30);
+     vitesse_fantome := fichierIni.readInteger('Vitesses', 'fantomes',55);
+     reincarnation := fichierIni.readInteger('Vitesses', 'réincarnations',35)*1000;
+     vitesse_animations := round(refresh*10);
+     vcolle := round(vitesse_selectglouto/1.5);
+     vpat := round(vitesse_selectglouto/1.5);
+     animations := true;        //theini.readbool('Affichage','Animations',true);
+     visu_img := false;         //theini.readbool('Affichage','Images de fond',false);
+     multijoueurs := fichierIni.readbool('Multijoueur','Joueurs', False);
+     cooperatif := fichierIni.readbool('Multijoueur','Mode coopératif', True);
+     adversaire := fichierIni.readbool('Multijoueur','Mode adversaire', False);
+     nb_level := NB_NIVEAUX;    //theini.readinteger('Niveaux','Nombre de niveaux',1);
+     if VERSION_PERSO then ch_tableaux := fichierIni.readstring('Chemins','tableaux',chemin_application+'niveaux\');
+     fichierIni.Free;
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
 var
-   theIni : TInifile;
+   fichierIni : TInifile;
 begin
-     theIni := TIniFile.Create(chemin_application+'gloutoman.ini');
-     TheIni.WriteInteger('Scores', 'High score',hscore);
-     Theini.writebool('Options','Effets sonores',effetssonores1.checked);
-     //theini.writeinteger('Vitesses','nb_cases',avancePixels);
-     TheIni.WriteInteger('Vitesses', 'gloutoman',vitesse_selectglouto);
-     TheIni.WriteInteger('Vitesses', 'fantomes',vitesse_fantome);
-     TheIni.WriteInteger('Vitesses', 'réincarnations',reincarnation div 1000);
-     //theini.writebool('Affichage','Animations',animations);
-     //theini.writebool('Affichage','Images de fond',visu_img);
-     theini.writeinteger('Affichage','Rafraichissement',refresh);
-     theini.writebool('Multijoueur','Joueurs',multijoueurs);
-     theini.writebool('Multijoueur','Mode coopératif',cooperatif);
-     theini.writebool('Multijoueur','Mode adversaire',adversaire);
-     if VERSION_PERSO then theini.writestring('Chemins','tableaux',ch_tableaux);
-     theIni.Free;
+     fichierIni := TIniFile.Create(chemin_application+'gloutoman.ini');
+     fichierIni.WriteInteger('Scores', 'High score', hscore);
+     fichierIni.writebool('Options','Effets sonores', Effetssonores1.checked);
+     fichierIni.WriteInteger('Vitesses', 'gloutoman', vitesse_selectglouto);
+     fichierIni.WriteInteger('Vitesses', 'fantomes', vitesse_fantome);
+     fichierIni.WriteInteger('Vitesses', 'réincarnations', reincarnation div 1000);
+     fichierIni.writeinteger('Affichage','Rafraichissement', refresh);
+     fichierIni.writebool('Multijoueur','Joueurs', multijoueurs);
+     fichierIni.writebool('Multijoueur','Mode coopératif', cooperatif);
+     fichierIni.writebool('Multijoueur','Mode adversaire', adversaire);
+     if VERSION_PERSO then fichierIni.writestring('Chemins','tableaux', ch_tableaux);
+     fichierIni.Free;
      DestructionObjets;
 end;
 
@@ -533,6 +535,7 @@ begin
   formAPropos.ShowModal();
 end;
 
+
 //
 //  ++  Gestion du clavier  ++
 //
@@ -555,13 +558,6 @@ begin
                   end;
                end;
           end;
-          {if (gloutoman[1].objetSelected=1)and(objet[1,1].nombre>0) then
-          begin
-               jouerSon(SND_PORTE);
-               //if porte2.fermee then porte2.ouverture:=true
-               //else porte2.fermeture:=true;
-               lasttickcount[9,1]:=gettickcount;
-          end;}
           if (gloutoman[1].objetSelected=1)and(objet[1,1].quantite>0)and(gloutoman[1].vie<4)then
           begin
                jouerSon(SND_POP);
@@ -628,13 +624,6 @@ begin
                    end;
                end;
           end;
-          {if (gloutoman[2].objetSelected=1)and(objet[1,2].nombre>0) then
-          begin
-               jouerSon(SND_POP);
-               //if porte2.fermee then porte2.ouverture:=true
-               //else porte2.fermeture:=true;
-               lasttickcount[9,1]:=gettickcount;
-          end; }
           if (gloutoman[2].objetSelected=1)and(objet[1,2].quantite>0)and(gloutoman[2].vie<4) then
           begin
                dec(objet[1,2].quantite);
@@ -736,7 +725,6 @@ begin
           if key='p' then
           begin
                pause:=not(pause);
-               //if pause then zoneJeux.cursor:=crdefault else zoneJeux.cursor:=crnone;
                pause1.visible:=pause;
           end
           else if (key='0') then
@@ -752,13 +740,6 @@ begin
                     end;
                     end;
                end;
-               {if (gloutoman[1].objetSelected=1)and(objet[1,1].quantite>0) then
-               begin
-                    jouerSon(SND_PORTE);
-                    if porte2.fermee then porte2.ouverture:=true
-                    else porte2.fermeture:=true;
-                    lasttickcount[9,1]:=gettickcount;
-               end;}
                if (gloutoman[1].objetSelected=1)and(objet[1,1].quantite>0)and(gloutoman[1].vie<4) then
                begin
                     dec(objet[1,1].quantite);
@@ -818,10 +799,18 @@ end;
 //  ++  Affichage des messages  ++
 //
 procedure TFormMain.affichageMessage(texte : String; typeAffichageMessage : Integer);
+var
+  x, y : Integer;
 begin
   labelPoints.Visible := False;
   sleep(500);
-  animationMessage;
+  if animFermeture = False then
+  begin
+    animX := 0;
+    animY := 0;
+    animFermeture := True;
+  end;
+
   case typeAffichageMessage of
     0:begin
       jouerSon(SND_GAGNE);
@@ -836,34 +825,73 @@ begin
       typeMessage := True;
     end;
   end;
-  reponseMessage := False;
-  messageAAfficher := texte;
-  formMessages.Position := poMainFormCenter;
-  formMessages.ShowModal();
-  timerAnimationDialog.Enabled := False;
+  actionMessage := typeAffichageMessage;
+  PanelMessages.Visible := True;
+
+  // Affichage du panneau des messages
+  imageFond.canvas.brush.color := couleur_fond;
+  imageFond.canvas.pen.color := couleur_fond;
+  imageFond.canvas.rectangle(0,0,282,178);
+  for x := 1 to 35 do
+  begin
+    imageListMurs.draw(imageFond.canvas,x*8-8+1,1*8-8+1,trunc(random(6)));
+    imageListMurs.draw(imageFond.canvas,x*8-8+1,22*8-8+1,trunc(random(6)));
+  end;
+  for y := 1 to 22 do
+  begin
+    imageListMurs.draw(imageFond.canvas,1*8-8+1,y*8-8+1,trunc(random(6)));
+    imageListMurs.draw(imageFond.canvas,35*8-8+1,y*8-8+1,trunc(random(6)));
+  end;
+  Message.Caption := texte;
+  if not(typeMessage) then
+  begin
+    buttonNon.Visible := False;
+    buttonOK.Width := 249;
+    buttonOK.Caption := 'CONTINUER';
+  end
+  else
+  begin
+    buttonNon.Visible := True;
+    buttonOK.Width := 122;
+    buttonOK.Caption := 'OUI';
+  end;
 end;
 
-{function affichageMessage2(texte : String; typeAffichageMessage : Boolean): System.Integer;
-var
-  resultat : Integer;
+procedure TFormMain.ButtonOKClick(Sender: TObject);
 begin
-  sleep(500);
-  if not(typeAffichageMessage) then FormMain.jouerSon(SND_NIVGAGNE) else FormMain.jouerSon(SND_TUT);
-  FormMain.reponseMessage := False;
-  FormMain.messageAAfficher := texte;
-  FormMain.typeMessage := typeAffichageMessage;
-  resultat :=formMessages.ShowModal();
-  FormMain.label1.caption := intToStr(resultat);
-  affichageMessage2 := resultat;
-end; }
-
-procedure TFormMain.animationMessage;
-begin
-  animX := 0;
-  animY := 0;
-  timerAnimationDialog.Enabled := True;
-  //animFermeture := True;
+  case actionMessage of
+    0:begin
+      animFermeture := False;
+      pause := False;
+      PanelMessages.Visible := False;
+      if not(one) then
+      begin
+        if level<nb_level then inc(level)
+        else if (level=nb_level) then gagner;
+        Debut_tableau;
+      end
+      else Gagner;
+    end;
+    1:begin
+      affichageMessage(MESSAGE7, 2);
+    end;
+    2:begin
+      animFermeture := False;
+      pause := False;
+      PanelMessages.Visible := False;
+      Nouvelle_partie;
+    end;
+  end;
 end;
+
+procedure TFormMain.ButtonNonClick(Sender: TObject);
+begin
+  animFermeture := False;
+  pause := False;
+  PanelMessages.Visible := False;
+  Close;
+end;
+
 
 //
 //  **********************
@@ -1255,19 +1283,6 @@ end;
 //
 //  ++  Gestion des déplacements et animations  ++
 //
-procedure TFormMain.TimerAnimationDialogTimer(Sender: TObject);
-begin
-  zoneJeux.canvas.brush.color:=couleur_fond;
-  zoneJeux.canvas.pen.color:=couleur_fond;
-  if animX<320 then
-  begin
-  inc(animX,8);
-  inc(animY,5);
-    zoneJeux.canvas.rectangle(320-animX,200-animY,320+animX,200+animY);
-  end
-  else timerAnimationDialog.Enabled := False;
-end;
-
 procedure TFormMain.TimerPrincipalTimer(Sender: TObject);
 var
    tickcount, u, n, numTempo, numLienTempo, numPorte : Integer;
@@ -1575,104 +1590,104 @@ begin
 
      u:=0;
 
-//  Dessin du tableau
-for x:=1 to NB_COLONNES do
-for y:=1 to NB_LIGNES do
-begin
-     case tableau[x,y] of
-          1..15:imagelistMurs.draw(zoneJeux.canvas,x*8-8,y*8-8,tableau[x,y]-1);
-          16:imagelistMurs.draw(zoneJeux.canvas,x*8-8,y*8-8,COUL_MURF);
-          17:begin
-            for i:=1 to 10 do
-            begin
-              if (porte[i].x=x) and (porte[i].y=y) then u:=i;
+  //  Dessin du tableau
+  for x:=1 to NB_COLONNES do
+  for y:=1 to NB_LIGNES do
+  begin
+       case tableau[x,y] of
+            1..15:imagelistMurs.draw(zoneJeux.canvas,x*8-8,y*8-8,tableau[x,y]-1);
+            16:imagelistMurs.draw(zoneJeux.canvas,x*8-8,y*8-8,COUL_MURF);
+            17:begin
+              for i:=1 to 10 do
+              begin
+                if (porte[i].x=x) and (porte[i].y=y) then u:=i;
+              end;
+                if (tableau[x-2,y]>=1) and (tableau[x-2,y]<=15) then
+                  imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTEV+porte[u].image_courante)
+                else if (tableau[x,y+2]>=1) and (tableau[x,y+2]<=15) then
+                  imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTEH+porte[u].image_courante)
+                else imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
+                  if (tableau[x-2,y]>=1) and (tableau[x-2,y]<=15) and (tableau[x,y+2]>=1) and (tableau[x,y+2]<=15)then
+                    imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
             end;
-              if (tableau[x-2,y]>=1) and (tableau[x-2,y]<=15) then
-                imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTEV+porte[u].image_courante)
-              else if (tableau[x,y+2]>=1) and (tableau[x,y+2]<=15) then
-                imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTEH+porte[u].image_courante)
-              else imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
-                if (tableau[x-2,y]>=1) and (tableau[x-2,y]<=15) and (tableau[x,y+2]>=1) and (tableau[x,y+2]<=15)then
-                  imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
-          end;
-          18:begin
-            for i:=1 to 10 do
-            begin
-              if (porte[i].x=x) and (porte[i].y=y) then u:=i;
+            18:begin
+              for i:=1 to 10 do
+              begin
+                if (porte[i].x=x) and (porte[i].y=y) then u:=i;
+              end;
+                if (tableau[x+2,y]>=1) and (tableau[x+2,y]<=15) then
+                  imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTECOULV+porte[u].image_courante)
+                else if (tableau[x,y-2]>=1) and (tableau[x,y-2]<=15) then
+                  imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTECOULH+porte[u].image_courante)
+                else imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
+                  if (tableau[x+2,y]>=1) and (tableau[x+2,y]<=15) and (tableau[x,y-2]>=1) and (tableau[x,y-2]<=15)then
+                    imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
             end;
-              if (tableau[x+2,y]>=1) and (tableau[x+2,y]<=15) then
-                imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTECOULV+porte[u].image_courante)
-              else if (tableau[x,y-2]>=1) and (tableau[x,y-2]<=15) then
-                imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PORTECOULH+porte[u].image_courante)
-              else imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
-                if (tableau[x+2,y]>=1) and (tableau[x+2,y]<=15) and (tableau[x,y-2]>=1) and (tableau[x,y-2]<=15)then
-                  imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_ERREUR);
-          end;
-          19:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_AIL);
-          20:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_CERISE);
-          21:if multijoueurs and adversaire then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BANANE);
-          22:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POINT);
-          23:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PIECE);
-          24:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POMME);
-          25:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_FLEUR);
-          26:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_MULTIPLICATEUR+bonus.image_courante);
-          27:if afficherTout then imagelistMurs.draw(zoneJeux.canvas,x*8-8,y*8-8,IMG_INVISIBLE);
-          28:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOUTON);
-          //29:imageListObjetsFixes.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_TEMPO); // Uniquement dans le programme Editeur
-          30:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PACGOM);
-          31:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_COLLE);
-          32:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PATINOIRE);
-          33:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_GLACE);
-          34:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_TIMER+timer.image_courante);
-          35:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PASSAGE+passage.image_courante);
-          36:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_TELEPORTEUR+telep.image_courante);
-          37:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_VIESUPP+viesupp.image_courante);
-          38:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_SECOURS);
-          39:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_GOUSSE);
-          40:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POISON);
-          //41:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_CLEF);
-          42:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_DYNAMITE+dynamite[1].image_courante);
-          43:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOMBE+bombe[1].image_courante);
-          //44..48:imagelistObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,tableau[x,y]-20);
-     end;
-end;
+            19:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_AIL);
+            20:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_CERISE);
+            21:if multijoueurs and adversaire then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BANANE);
+            22:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POINT);
+            23:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PIECE);
+            24:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POMME);
+            25:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_FLEUR);
+            26:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_MULTIPLICATEUR+bonus.image_courante);
+            27:if afficherTout then imagelistMurs.draw(zoneJeux.canvas,x*8-8,y*8-8,IMG_INVISIBLE);
+            28:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOUTON);
+            //29:imageListObjetsFixes.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_TEMPO); // Uniquement dans le programme Editeur
+            30:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PACGOM);
+            31:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_COLLE);
+            32:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PATINOIRE);
+            33:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_GLACE);
+            34:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_TIMER+timer.image_courante);
+            35:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_PASSAGE+passage.image_courante);
+            36:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_TELEPORTEUR+telep.image_courante);
+            37:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_VIESUPP+viesupp.image_courante);
+            38:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_SECOURS);
+            39:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_GOUSSE);
+            40:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POISON);
+            //41:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_CLEF);
+            42:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_DYNAMITE+dynamite[1].image_courante);
+            43:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOMBE+bombe[1].image_courante);
+            //44..48:imagelistObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,tableau[x,y]-20);
+       end;
+  end;
 
-// Affichage des fantômes
-for i:=1 to nb_fantomes do fantome[i].Afficher(zoneJeux, (gloutoman[1].etat>0)or(gloutoman[2].etat>0));
+  // Affichage des fantômes
+  for i:=1 to nb_fantomes do fantome[i].Afficher(zoneJeux, (gloutoman[1].etat>0)or(gloutoman[2].etat>0));
 
-// Affichage des GloutoMan
-for i:=1 to 2 do gloutoman[i].Afficher(zoneJeux);
+  // Affichage des GloutoMan
+  for i:=1 to 2 do gloutoman[i].Afficher(zoneJeux);
 
-// Affichage des explosions
-if explosion[1].active then imageListExplosion.Draw(zoneJeux.Canvas,explosion[1].x*8-40,explosion[1].y*8-40,IMG_EXPLOSION+explosion[1].image_courante);
-if explosion[2].active then imageListExplosion.Draw(zoneJeux.Canvas,explosion[2].x*8-40,explosion[2].y*8-40,IMG_EXPLOSION+explosion[2].image_courante);
+  // Affichage des explosions
+  if explosion[1].active then imageListExplosion.Draw(zoneJeux.Canvas,explosion[1].x*8-40,explosion[1].y*8-40,IMG_EXPLOSION+explosion[1].image_courante);
+  if explosion[2].active then imageListExplosion.Draw(zoneJeux.Canvas,explosion[2].x*8-40,explosion[2].y*8-40,IMG_EXPLOSION+explosion[2].image_courante);
 
-// Affichage du score
-afficher_score;
+  // Affichage du score
+  afficher_score;
 
-// Animation d'ouverture du tableau
-if animOuverture then
-begin
-   if animX<=320 then
+  // Animation d'ouverture du tableau
+  if animOuverture then
+  begin
+     if animX<=320 then
+      begin
+          inc(animX,8);
+          inc(animY,5);
+          zoneJeux.canvas.rectangle(animX,animY,640-animX,400-animY);
+      end
+      else animOuverture:=false;
+  end;
+
+  // Animation de fermeture du tableau
+  if animFermeture then
     begin
-        inc(animX,8);
-        inc(animY,5);
-        zoneJeux.canvas.rectangle(animX,animY,640-animX,400-animY);
-    end
-    else animOuverture:=false;
-end;
-
-// Animation de fermeture du tableau
-{if animFermeture then
-begin
-   if animX<=320 then
-    begin
-        inc(animX,8);
-        inc(animY,5);
-        zoneJeux.canvas.rectangle(320-animX,200-animY,320+animX,200+animY);
-    end
-    else animFermeture:=false;
-end;}
+       if animX<=320 then
+        begin
+            inc(animX,8);
+            inc(animY,5);
+            zoneJeux.canvas.rectangle(320-animX,200-animY,320+animX,200+animY);
+        end
+        else zoneJeux.canvas.rectangle(0,0,640,400);
+    end;
 
 end;
 
@@ -2218,39 +2233,20 @@ begin
           if (gloutoman[1].vie=0) and (gloutoman[2].vie=0) then
           begin
                pause:=true;
-               //zoneJeux.cursor:=crdefault;
-               if cooperatif then affichageMessage(MESSAGE2, 1)
+               if cooperatif then if not(animFermeture) then affichageMessage(MESSAGE2, 1)
                else
                begin
-                    if gloutoman[1].score>gloutoman[2].score then affichageMessage(MESSAGE8, 0)
-                    else affichageMessage(MESSAGE9, 0);
+                    if gloutoman[1].score>gloutoman[2].score then if not(animFermeture) then affichageMessage(MESSAGE8, 0)
+                    else if not(animFermeture) then affichageMessage(MESSAGE9, 0);
                end;
-               affichageMessage(MESSAGE7, 2);
-               if reponseMessage then
-               begin
-                    pause:=false;
-                    //zoneJeux.cursor:=crnone;
-                    Nouvelle_partie;
-               end
-               else
-                   close;
+               if not(animFermeture) then affichageMessage(MESSAGE7, 2);
           end;
      end
      else
      begin
           if (gloutoman[1].score>hscore)and not(tricheur) then hscore:=gloutoman[1].score;
           pause:=true;
-          //zoneJeux.cursor:=crdefault;
-          affichageMessage(MESSAGE2, 1);
-          affichageMessage(MESSAGE7, 2);
-          if reponseMessage then
-          begin
-             pause:=false;
-             //zoneJeux.cursor:=crnone;
-             Nouvelle_partie;
-          end
-          else
-              close;
+          if not(animFermeture) then affichageMessage(MESSAGE2, 1);
      end;
 end;
 
@@ -2262,41 +2258,27 @@ begin
      if not(multijoueurs)or((multijoueurs)and(cooperatif))then
      begin
           pause:=true;
-          //zoneJeux.cursor:=crdefault;
-          affichageMessage(MESSAGE1+inttostr(level), 0);
-          pause:=false;
-          //zoneJeux.cursor:=crnone;
-          if not(one) then
-          begin
-            if level<nb_level then inc(level)
-            else if (level=nb_level) then gagner;
-            debut_tableau;
-          end
-          else gagner;
+          if not(animFermeture) then affichageMessage(MESSAGE1+inttostr(level), 0);
      end
      else if multijoueurs and adversaire then
      begin
           if nb_cerises=4 then
           begin
                pause:=true;
-               //zoneJeux.cursor:=crdefault;
-               affichageMessage(MESSAGE3+inttostr(level), 0);
-               inc(gloutoman[1].score,5000);
-               pause:=false;
-               //zoneJeux.cursor:=crnone;
-               inc(level);
-               debut_tableau;
+               if not(animFermeture) then
+               begin
+                 AffichageMessage(MESSAGE3+inttostr(level), 0);
+                 inc(gloutoman[1].score,5000);
+               end;
           end
           else if nb_bananes=4 then
           begin
                pause:=true;
-               //zoneJeux.cursor:=crdefault;
-               affichageMessage(MESSAGE4+inttostr(level), 0);
-               inc(gloutoman[2].score,5000);
-               pause:=false;
-               //zoneJeux.cursor:=crnone;
-               inc(level);
-               debut_tableau;
+               if not(animFermeture) then
+               begin
+                 AffichageMessage(MESSAGE4+inttostr(level), 0);
+                 inc(gloutoman[2].score,5000);
+               end;
           end;
      end;
 end;
@@ -2307,23 +2289,13 @@ end;
 procedure TFormMain.gagner;
 begin
      pause:=true;
-     //zoneJeux.cursor:=crdefault;
+     if not(multijoueurs)and(gloutoman[1].score>hscore)and not(tricheur) then hscore:=gloutoman[1].score;
      if multijoueurs and adversaire then
      begin
-               if gloutoman[1].score>gloutoman[2].score then affichageMessage(MESSAGE8, 0)
-               else affichageMessage(MESSAGE9, 0);
+         if gloutoman[1].score>gloutoman[2].score then if not(animFermeture) then AffichageMessage(MESSAGE8, 0)
+         else if not(animFermeture) then AffichageMessage(MESSAGE9, 0);
      end;
-     affichageMessage(MESSAGE6, 2);
-     if reponseMessage then
-     begin
-         if not(multijoueurs)and(gloutoman[1].score>hscore)and not(tricheur) then hscore:=gloutoman[1].score;
-         pause:=false;
-         //zoneJeux.cursor:=crnone;
-         Nouvelle_partie;
-     end
-     else
-         close;
-
+     if not(animFermeture) then AffichageMessage(MESSAGE6, 2);
 end;
 
 //

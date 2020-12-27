@@ -151,6 +151,83 @@ object FormMain: TFormMain
     TabOrder = 0
     Visible = False
   end
+  object PanelMessages: TPanel
+    Left = 180
+    Top = 144
+    Width = 282
+    Height = 178
+    BevelOuter = bvNone
+    Caption = 'PanelMessages'
+    Color = clBlack
+    ParentBackground = False
+    TabOrder = 1
+    Visible = False
+    object ImageFond: TImage
+      Left = 0
+      Top = 0
+      Width = 282
+      Height = 178
+      Align = alClient
+      ExplicitLeft = 32
+      ExplicitTop = 8
+      ExplicitWidth = 105
+      ExplicitHeight = 105
+    end
+    object Message: TLabel
+      Left = 16
+      Top = 40
+      Width = 249
+      Height = 69
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Vous avez gagn'#233' le niveau 1'
+      Color = clPurple
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clYellow
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
+      WordWrap = True
+    end
+    object ButtonNon: TButton
+      Left = 143
+      Top = 115
+      Width = 122
+      Height = 37
+      Cancel = True
+      Caption = 'NON'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ModalResult = 7
+      ParentFont = False
+      TabOrder = 0
+      Visible = False
+      OnClick = ButtonNonClick
+    end
+    object ButtonOK: TButton
+      Left = 16
+      Top = 115
+      Width = 122
+      Height = 37
+      Caption = 'CONTINUER'
+      Default = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ModalResult = 6
+      ParentFont = False
+      TabOrder = 1
+      OnClick = ButtonOKClick
+    end
+  end
   object MainMenu1: TMainMenu
     Left = 24
     Top = 16
@@ -21668,7 +21745,7 @@ object FormMain: TFormMain
   object ImageListGloutoMan: TImageList
     Height = 23
     Width = 23
-    Left = 200
+    Left = 552
     Top = 72
     Bitmap = {
       494C010160006800040017001700FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
@@ -28509,8 +28586,8 @@ object FormMain: TFormMain
   object ImageListFantomes: TImageList
     Height = 23
     Width = 23
-    Left = 304
-    Top = 72
+    Left = 560
+    Top = 136
     Bitmap = {
       494C010122002800040017001700FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       00000000000036000000280000005C000000CF00000001002000000000009029
@@ -30976,12 +31053,5 @@ object FormMain: TFormMain
       FFFFFFF0E0001FC0003FFFFFFFFFFFF0F0003FE0007FFFFFFFFFFFF0FC00FFF8
       01FFFFFFFFFFFFF0FE01FFFC03FFFFFFFFFFFFF0000000000000000000000000
       00000000000000000000}
-  end
-  object TimerAnimationDialog: TTimer
-    Enabled = False
-    Interval = 30
-    OnTimer = TimerAnimationDialogTimer
-    Left = 96
-    Top = 72
   end
 end

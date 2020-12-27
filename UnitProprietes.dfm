@@ -128,6 +128,10 @@ object FormProprietes: TFormProprietes
     object TabSheet2: TTabSheet
       Caption = 'Affichage'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Image4: TImage
         Left = 8
         Top = 24
@@ -2131,6 +2135,10 @@ object FormProprietes: TFormProprietes
     object TabSheet3: TTabSheet
       Caption = 'Triche'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label4: TLabel
         Left = 48
         Top = 21
@@ -2245,6 +2253,10 @@ object FormProprietes: TFormProprietes
     object TabSheet4: TTabSheet
       Caption = 'Multi-joueurs'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Bevel6: TBevel
         Left = 216
         Top = 64

@@ -8,8 +8,7 @@ uses
   UnitProprietes in 'UnitProprietes.pas' {FormProprietes},
   UnitAPropos in 'UnitAPropos.pas' {FormAPropos},
   UnitObjets in 'UnitObjets.pas',
-  JME_Jeux2D in 'JME_Jeux2D.pas',
-  UnitMessages in 'UnitMessages.pas' {FormMessages};
+  JME_Jeux2D in 'JME_Jeux2D.pas';
 
 {$R *.res}
 
@@ -19,6 +18,5 @@ begin
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormProprietes, FormProprietes);
   Application.CreateForm(TFormAPropos, FormAPropos);
-  Application.CreateForm(TFormMessages, FormMessages);
   Application.Run;
 end.
