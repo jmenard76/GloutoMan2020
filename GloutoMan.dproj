@@ -79,8 +79,8 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <Icon_MainIcon>GloutoMan_Icon.ico</Icon_MainIcon>
-        <VerInfo_Build>30</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.2.30;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>31</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.2.31;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
         <VerInfo_MajorVer>9</VerInfo_MajorVer>
         <VerInfo_Release>2</VerInfo_Release>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
@@ -101,8 +101,8 @@
         <VerInfo_MajorVer>9</VerInfo_MajorVer>
         <VerInfo_Release>2</VerInfo_Release>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.2.1;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>1</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=9.2.2.2;InternalName=GloutoMan 2020;LegalCopyright=Jérôme Menard;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=9.2.1.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>2</VerInfo_Build>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
     </PropertyGroup>
     <ItemGroup>

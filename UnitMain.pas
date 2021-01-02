@@ -1548,7 +1548,7 @@ begin
             begin
                 case tableau[bombe[n].x+i,bombe[n].y+j] of
                 1..16:if (bombe[n].x+i>1)and(bombe[n].x+i<NB_COLONNES) and (bombe[n].y+j>1)and(bombe[n].y+j<NB_LIGNES) then tableau[bombe[n].x+i,bombe[n].y+j]:=0;
-                19,21,{23,}24..27,{28,}32:tableau[bombe[n].x+i,bombe[n].y+j]:=0;
+                19, 22..25, 27, 30, 33..34, 37..40:tableau[bombe[n].x+i,bombe[n].y+j]:=0;
                 end;
                 for u:=1 to 10 do
                 begin
