@@ -636,7 +636,7 @@ begin
                     case tableau[gloutoman[2].x,gloutoman[2].y] of
                         0:begin
                         dec(objet[2,2].quantite);
-                        tableau[gloutoman[2].x,gloutoman[2].y]:=27;
+                        tableau[gloutoman[2].x,gloutoman[2].y]:=42;
                         dynamite[2].x:=gloutoman[2].x;
                         dynamite[2].y:=gloutoman[2].y;
                         dynamite[2].active:=true;
@@ -659,7 +659,7 @@ begin
                     case tableau[gloutoman[2].x,gloutoman[2].y] of
                         0:begin
                         dec(objet[3,2].quantite);
-                        tableau[gloutoman[2].x,gloutoman[2].y]:=32;
+                        tableau[gloutoman[2].x,gloutoman[2].y]:=43;
                         bombe[2].x:=gloutoman[2].x;
                         bombe[2].y:=gloutoman[2].y;
                         bombe[2].active:=true;
@@ -1647,8 +1647,16 @@ begin
             39:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_GOUSSE);
             40:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_POISON);
             //41:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_CLEF);
-            42:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_DYNAMITE+dynamite[1].image_courante);
-            43:imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOMBE+bombe[1].image_courante);
+            42:begin
+              if not((dynamite[1].active) and (dynamite[2].active)) then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_DYNAMITE+dynamite[1].image_courante)
+              else if dynamite[1].active then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_DYNAMITE+dynamite[1].image_courante)
+              else if dynamite[2].active then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_DYNAMITE+dynamite[2].image_courante);
+            end;
+            43:begin
+              if not((bombe[1].active) and (bombe[2].active)) then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOMBE+bombe[1].image_courante)
+              else if bombe[1].active then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOMBE+bombe[1].image_courante)
+              else if bombe[2].active then imageListObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,IMG_BOMBE+bombe[2].image_courante);
+            end;
             //44..48:imagelistObjets.draw(zoneJeux.canvas,x*8-16,y*8-16,tableau[x,y]-20);
        end;
   end;
