@@ -132,7 +132,7 @@ type
     refresh, vitesse_selectglouto, vitesse_fantome, vitesse_animations : Integer;
     avancePixels, reincarnation, vcolle, vpat : Integer;
     coef_vitesse_fantome : Single;
-    animX, animY : Integer;
+    animX, animY, styleAnim : Integer;
     animOuverture, animFermeture : Boolean;
 
     // Variables pour triche
@@ -809,6 +809,7 @@ begin
     animX := 0;
     animY := 0;
     animFermeture := True;
+    styleAnim := trunc(random(5));
   end;
 
   case typeAffichageMessage of
@@ -1151,7 +1152,7 @@ begin
     animOuverture := True;
     animX := 0;
     animY := 0;
-
+    styleAnim := trunc(random(5));
     dessiner;
 end;
 
@@ -1276,7 +1277,7 @@ begin
      animOuverture := True;
      animX := 0;
      animY := 0;
-
+     styleAnim := trunc(random(5));
      dessiner;
 end;
 
@@ -1672,7 +1673,13 @@ begin
       begin
           inc(animX,8);
           inc(animY,5);
-          zoneJeux.canvas.rectangle(animX,animY,640-animX,400-animY);
+          case styleAnim of
+            0:zoneJeux.canvas.rectangle(animX,animY,640-animX,400-animY);
+            1:zoneJeux.Canvas.Rectangle(animX*2,0,640,400);
+            2:zoneJeux.Canvas.Rectangle(0,0,640-animX*2,400);
+            3:zoneJeux.Canvas.Rectangle(0,animY*2,640,400);
+            4:zoneJeux.Canvas.Rectangle(0,0,640,400-animY*2);
+          end;
       end
       else animOuverture:=false;
   end;
@@ -1684,7 +1691,13 @@ begin
         begin
             inc(animX,8);
             inc(animY,5);
-            zoneJeux.canvas.rectangle(320-animX,200-animY,320+animX,200+animY);
+            case styleAnim of
+              0:zoneJeux.canvas.rectangle(320-animX,200-animY,320+animX,200+animY);
+              1:zoneJeux.Canvas.Rectangle(0,0,animX*2,400);
+              2:zoneJeux.Canvas.Rectangle(640-animX*2,0,640,400);
+              3:zoneJeux.Canvas.Rectangle(0,0,640,animY*2);
+              4:zoneJeux.Canvas.Rectangle(0,400-animY*2,640,400);
+            end;
         end
         else zoneJeux.canvas.rectangle(0,0,640,400);
     end;
